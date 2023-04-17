@@ -16,7 +16,9 @@ const verifyMessage = async ({ message, address, signature }) => {
 };
 
 export default function VerifyMessage() {
-  
+    //display if signature is valid or not
+    const [isValidSignature, setIsValidSignature] = useState("");
+
     const handleVerification = async (e) => {
       e.preventDefault();
       const data = new FormData(e.target);
@@ -28,8 +30,10 @@ export default function VerifyMessage() {
   
       if (isValid) {
         console.log("Signature is valid!");
+        setIsValidSignature("valid")
       } else {
         console.log("Invalid signature");
+        setIsValidSignature("invalid")
       }
     }
 
@@ -73,12 +77,18 @@ return (
         <footer className="p-4">
           <button
             type="submit"
-            className="btn btn-primary submit-button focus:ring focus:outline-none w-full"
-          >
+            className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
             Verify signature
           </button>
         </footer>
-        <div className="p-4 mt-4">
+        <div className="p-4 mt-4 bg-gray-100 rounded-lg shadow-md">
+        {isValidSignature === "" ? (
+            <p></p>
+          ) : isValidSignature === "valid" ? (
+            <p className="text-green-500">Signature is valid!</p>
+          ) : (
+            <p className="text-red-500">Invalid signature</p>
+          )}
         </div>
       </div>
     </form>
