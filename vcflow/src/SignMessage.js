@@ -30,12 +30,18 @@ export default function SignMessage() {
 
     const handleSign = async (e) => {
         e.preventDefault();
-        const data = new FormData(e.target);
-        const sig = await signMessage({
-            message: data.get("message")
-        });
-        if (sig) {
+        const fileInput = document.getElementById("fileInput");
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = async (e) => {
+          const message = e.target.result;                
+          console.log("The message: ", message);
+          const sig = await signMessage({ message });
+          //console.log(sig)
+          if (sig) {
             setSignatures([...signatures, sig])
+          }
         }
     };
 
@@ -48,12 +54,15 @@ export default function SignMessage() {
             </h1>
             <div className="">
               <div className="my-3">
-                <textarea
+                <label htmlFor="fileInput" className="text-m font-semibold text-gray-700">
+                  Select a JSON file to sign
+                </label>
+                <input
                   required
-                  type="text"
-                  name="message"
-                  className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                  placeholder="Message"
+                  type="file"
+                  id="fileInput"
+                  accept=".json"
+                  className="w-full h-10"
                 />
               </div>
             </div>
@@ -61,8 +70,7 @@ export default function SignMessage() {
           <footer className="p-4">
             <button
               type="submit"
-              className="btn btn-primary submit-button focus:ring focus:outline-none w-full"
-            >
+              className="btn btn-primary submit-button focus:ring focus:outline-none w-full">
               Sign message
             </button>
           </footer>
@@ -81,6 +89,23 @@ export default function SignMessage() {
                 className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
                 placeholder="Generated signature"
                 value={signatures[signatures.length - 1].signature}
+              />
+              <p>W3C proof format: </p>
+              <textarea
+                type="text"
+                readOnly
+                ref={resultBox}
+                className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
+                placeholder="W3C Proof"
+                value={`
+                "proof": {
+                    "type": "EcdsaSecp256k1RecoverySignature2020",
+                    "created": "${new Date().toISOString()}",
+                    "proofPurpose": "assertionMethod",
+                    "verificationMethod": "add issuer did here",
+                    "jws": "${signatures[signatures.length - 1].signature}"
+                  }`
+                }
               />
             </div>
           </div>
