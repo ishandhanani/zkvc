@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# additional things not to push
+.DS_Store
+/.DS_Store
