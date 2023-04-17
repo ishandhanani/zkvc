@@ -1,0 +1,41 @@
+{
+    "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.w3.org/2018/credentials/examples/v1",
+        "<do we need any more>"
+    ],
+    "type": ["VerifiableCredential", "DriversLicenseCredential"],
+    "issuer": {
+        "id": "<did for DMV>",
+        "name": "Texas DMV"
+    },
+    "issuanceDate": "<date>",
+    "credentialSubject": {
+        "id": "<my did>",
+        "name": "Ishan Dhanani",
+        "birthDate": "2000-10-10",
+        "license": {
+            "class": "C",
+            "number": "A1234567890",
+            "birthDate": "2000-10-10",
+            "issueDate": "XXXX-XX-XX",
+            "expiresOn": "2027-01-01",
+            "lastName": "Dhanani",
+            "firstMiddleName": "Ishan A",
+            "address": {
+                "streetAddress": "XXXX TAMU Ln",
+                "city": "Austin",
+                "state": "Texas",
+                "zipcode": "12345"
+            },
+            "restrictions": "A",
+            "end": "NONE",
+            "height": "6.03",
+            "sex": "M",
+            "eyes": "BRO",
+            "DD": "<lots of numbers>",
+            "issuedBy": "Texas Department of Motor Vehicles"
+        }
+  },
+  "proof": {}
+}

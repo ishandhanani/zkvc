@@ -1,0 +1,11 @@
+{
+  "name": "zkvc",
+  "version": "1.0.0",
+  "description": "Creating verifiable credentials using ETH keys and wrapping them in zkp using ECDSA-circom",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ishan Dhanani",
+  "license": "ISC"
+}

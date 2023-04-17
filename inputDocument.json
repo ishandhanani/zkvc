@@ -1,0 +1,35 @@
+{
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://w3id.org/vdl/v1"
+    ],
+    "type": [
+        "VerifiableCredential",
+        "Iso18013DriversLicense"
+    ],
+    "issuer": "did:key:z6MkjxvA4FNrQUhr8f7xhdQuP1VPzErkcnfxsRaU5oFgy2E5",
+    "issuanceDate": "2018-01-15T10:00:00.0000000-07:00",
+    "expirationDate": "2022-08-27T12:00:00.0000000-06:00",
+    "credentialSubject": {
+        "id": "did:example:12347abcd",
+        "license": {
+          "type": "Iso18013DriversLicense",
+          "document_number": "542426814",
+          "family_name": "DHANANI",
+          "given_name": "ISHAN",
+          "portrait": "/9j/4AAQSkZJRgABAQEAkACQA...gcdgck5HtRRSClooooP/2Q==",
+          "birth_date": "1998-08-28",
+          "issue_date": "2018-01-15T10:00:00.0000000-07:00",
+          "expiry_date": "2022-08-27T12:00:00.0000000-06:00",
+          "issuing_country": "US",
+          "issuing_authority": "CO",
+          "driving_privileges": {
+            "codes": [{"code": "C"}],
+            "vehicle_category_code": "D",
+            "issue_date": "2019-01-01",
+            "expiry_date": "2027-01-01"
+          },
+          "un_distinguishing_sign": "USA"
+        }
+    }
+}
