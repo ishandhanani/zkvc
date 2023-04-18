@@ -29,11 +29,6 @@ export default function VerifyMessage() {
       console.log(m);
       const sig = json.proof.jws;
       const addr = json.proof.verificationMethod
-      // const fileReader = new FileReader();
-      // fileReader.readAsText(file);
-      // fileReader.onload = async () => {
-      //   const json = JSON.parse(fileReader.result);
-      // }
       
       const isValid = await verifyMessage({
         message: m,
