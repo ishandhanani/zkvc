@@ -1,48 +1,77 @@
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import SignMessage from './SignMessage';
 import VerifyMessage from './VerifyMessage';
 //import GenerateVerifiableCred from './GenerateVerifiableCred';
 
 //Roadmap
-//  1. Instead of a message input, upload a JSON-LD file (SignMessage)
-
-const handleFileUpload = async (file) => {
-  console.log(1)
-  const fileReader = new FileReader();
-  console.log(2)
-  fileReader.onload = async (e) => {
-    console.log(3)
-    const data = JSON.parse(e.target.result);
-    console.log(3)
-    const message = Object.values(data)[0];
-    console.log(4)
-    console.log(message);
-  }
-}
-
-
-
-//  2. Go through the flow and generate a VC-style proof (SignMessage)
-//  3. Download the complete JSON-LD signed VC (App.js)
 //  4. Be able to upload the VC into VerifyMessage and get output
 //  5. Implement docloader to check context?
 
-
-//Question - generating the signature
-
-
-function App() {
+function LandingPage({ onOptionSelect }) {
   return (
-    <div className="container mx-auto bg-green-50 rounded-lg shadow-lg border border-green-300 p-8 m-10 flex flex-wrap">
-      <div className="w-full lg:w-1/2">
-        <SignMessage />
-      </div>
-      <div className="w-full lg:w-1/2">
-        <VerifyMessage />
+    <div className="container mx-auto h-screen flex justify-center items-center">
+      <div className="flex flex-col items-center">
+        <button onClick={() => onOptionSelect('issue')} className="py-2 px-4 bg-green-500 text-white rounded-lg mb-2">Issue</button>
+        <button onClick={() => onOptionSelect('generateProof')} className="py-2 px-4 bg-green-500 text-white rounded-lg mb-2">Generate Proof</button>
+        <button onClick={() => onOptionSelect('verify')} className="py-2 px-4 bg-green-500 text-white rounded-lg mb-2">Verify</button>
       </div>
     </div>
   );
+}
+
+
+function App() {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  function handleOptionSelect(option) {
+    setSelectedOption(option);
+  }
+
+  function renderPage() {
+    switch (selectedOption) {
+      case 'issue':
+        return <SignMessage />;
+      case 'generateProof':
+        return <SignMessage />;
+      case 'verify':
+        return <VerifyMessage />;
+      default:
+        return (
+          <div>
+            <h1 className="text-3xl font-bold text-green-500 text-center mb-6">
+              ZKVC - Own Your Identity
+            </h1>
+          <LandingPage onOptionSelect={handleOptionSelect} />
+          </div>
+          );
+    }
+  }
+  return(
+    <div className="container mx-auto">
+      {renderPage()}
+      {selectedOption && (
+        <button 
+          className='py-2 px-4 bg-green-500 text-white rounded-lg absolute bottom-0 left-0 mb-6 ml-6'
+          onClick={() => setSelectedOption(null)}>
+            Return Home
+        </button>
+      )}
+    <button>
+
+    </button>
+    
+    </div>
+  )
+  // return (
+  //   <div className="container mx-auto bg-green-50 rounded-lg shadow-lg border border-green-300 p-8 m-10 flex flex-wrap">
+  //     <div className="w-full lg:w-1/2">
+  //       <SignMessage />
+  //     </div>
+  //     <div className="w-full lg:w-1/2">
+  //       <VerifyMessage />
+  //     </div>
+  //   </div>
+  // );
 }
 
 export default App;
