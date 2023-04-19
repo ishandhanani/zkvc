@@ -46,8 +46,9 @@ export default function SignMessage() {
           /**
            * @todo THIS SEEMS TO SAVE THE RESULT WITH THE SPACING FORMATTING...SHOULD WE JUST HAVE IT SIGN THE RAW STRING WITH NO SPACING?
            */
-          const message = e.target.result;                
-          console.log("The message: ", message); // testing remove for prod
+          const message = JSON.stringify(JSON.parse(e.target.result), 0);
+          console.log(typeof message)               
+          console.log(message); // testing remove for prod
           const sig = await signMessage({ message });
           if (sig) {
             const signedMessage = {

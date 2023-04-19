@@ -25,7 +25,7 @@ export default function VerifyMessage() {
       const file = data.get("signedvc");
       const fileContent = await file.text();
       const json = JSON.parse(fileContent);
-      const m = JSON.stringify(json, null, 2).split('"proof":')[0];
+      const m = JSON.stringify(json, null).split(',"proof":')[0] + '}';
       console.log(m);
       const sig = json.proof.jws;
       const addr = json.proof.verificationMethod
