@@ -59,32 +59,7 @@ return (
                 type="file"
                 name="signedvc"
                 className="input input-bordered focus:ring focus:outline-none"/>
-              {/* <textarea
-                required
-                type="text"
-                name="message"
-                className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                placeholder="Message"
-              /> */}
             </div>
-            {/* <div className="my-3">
-              <textarea
-                required
-                type="text"
-                name="signature"
-                className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                placeholder="Signature"
-              />
-            </div>
-            <div className="my-3">
-              <input
-                required
-                type="text"
-                name="address"
-                className="textarea w-full input input-bordered focus:ring focus:outline-none"
-                placeholder="Signer address"
-              />
-            </div> */}
           </div>
         </main>
         <footer className="p-4">

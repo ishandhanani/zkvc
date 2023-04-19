@@ -42,16 +42,14 @@ export default function SignMessage() {
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = async (e) => {
-          // save contents of the file
-          /**
-           * @todo THIS SEEMS TO SAVE THE RESULT WITH THE SPACING FORMATTING...SHOULD WE JUST HAVE IT SIGN THE RAW STRING WITH NO SPACING?
-           */
+          // save contents of the file as a string with no spaces
           const message = JSON.stringify(JSON.parse(e.target.result), 0);
-          console.log(typeof message)               
+          console.log(typeof message) // testing remove for prod               
           console.log(message); // testing remove for prod
           const sig = await signMessage({ message });
           if (sig) {
             const signedMessage = {
+              // the ... is basically an easy way to copy all the properties of message into a new object
               ...JSON.parse(message),
               proof: {
                 type: "EcdsaSecp256k1RecoverySignature2020",
@@ -62,6 +60,7 @@ export default function SignMessage() {
               },
             };
             const signedMessageJSON = JSON.stringify(signedMessage, null, 2);
+            // flow to download JSON - i dont understand it 100% at the moment but it works 
             const blob = new Blob([signedMessageJSON], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
