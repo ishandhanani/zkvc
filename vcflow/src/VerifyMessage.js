@@ -22,10 +22,18 @@ export default function VerifyMessage() {
     const handleVerification = async (e) => {
       e.preventDefault();
       const data = new FormData(e.target);
+      const file = data.get("signedvc");
+      const fileContent = await file.text();
+      const json = JSON.parse(fileContent);
+      const m = JSON.stringify(json, null).split(',"proof":')[0] + '}';
+      console.log(m);
+      const sig = json.proof.jws;
+      const addr = json.proof.verificationMethod
+      
       const isValid = await verifyMessage({
-        message: data.get("message"),
-        address: data.get("address"),
-        signature: data.get("signature")
+        message: m,
+        address: addr,
+        signature: sig
       });
   
       if (isValid) {
@@ -46,15 +54,20 @@ return (
           </h1>
           <div className="">
             <div className="my-3">
-              <textarea
+              <input  
+                required
+                type="file"
+                name="signedvc"
+                className="input input-bordered focus:ring focus:outline-none"/>
+              {/* <textarea
                 required
                 type="text"
                 name="message"
                 className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
                 placeholder="Message"
-              />
+              /> */}
             </div>
-            <div className="my-3">
+            {/* <div className="my-3">
               <textarea
                 required
                 type="text"
@@ -71,7 +84,7 @@ return (
                 className="textarea w-full input input-bordered focus:ring focus:outline-none"
                 placeholder="Signer address"
               />
-            </div>
+            </div> */}
           </div>
         </main>
         <footer className="p-4">
