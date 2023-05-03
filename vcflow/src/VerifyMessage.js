@@ -27,7 +27,8 @@ export default function VerifyMessage() {
       const json = JSON.parse(fileContent);
       const m = JSON.stringify(json, null).split(',"proof":')[0] + '}';
       console.log(m);
-      const sig = json.proof.jws;
+      const [header, payload, signature] = json.proof.jws.split(".");
+      const sig = atob(signature); //replace this because of proof
       const addr = json.proof.verificationMethod
       
       const isValid = await verifyMessage({
