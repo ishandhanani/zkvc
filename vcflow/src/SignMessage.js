@@ -1,10 +1,10 @@
+import jwsheader from './jwsheader.json';
 import { useState, useRef } from "react";
-const ethers = require("ethers")
+const ethers = require("ethers");
 
 // async function that signs the message and returns the signers information for further use 
 const signMessage = async ({ message }) => {
     try {
-        console.log({message}); //testing purposes remove for prod
         if (!window.ethereum) {
             throw new Error("Metamask cannot be found");
         }
@@ -25,6 +25,13 @@ const signMessage = async ({ message }) => {
     }
 };
 
+// async function that generates a valid jws token for the proof
+const jwsGen = ({ content, signature }) => {
+  const header = JSON.stringify(jwsheader);
+  const jws = [btoa(header), btoa(content), btoa(signature)].join('.');
+  return jws;
+}
+
 // exportable signing function for the main App.js 
 export default function SignMessage() {
     // react hook that ties to the textarea elements for the signature and the proof
@@ -42,21 +49,27 @@ export default function SignMessage() {
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = async (e) => {
+          // testing the bday signature only
+          // const bm = JSON.parse(e.target.result);
+          // const bday = JSON.stringify(bm.credentialSubject.license.birth_date);
+          // console.log("bday=", bday)
+          // const bsig = await signMessage({ message: bday });
+          // console.log("test", bsig)
           // save contents of the file as a string with no spaces
           const message = JSON.stringify(JSON.parse(e.target.result), 0);
-          console.log(typeof message) // testing remove for prod               
-          console.log(message); // testing remove for prod
+          console.log(typeof(message))
           const sig = await signMessage({ message });
+          console.log("the sig", sig)
           if (sig) {
             const signedMessage = {
               // the ... is basically an easy way to copy all the properties of message into a new object
               ...JSON.parse(message),
               proof: {
                 type: "EcdsaSecp256k1RecoverySignature2020",
-                created: new Date().toISOString(),
+                created: Math.floor(new Date().getTime() / 1000),
                 proofPurpose: "assertionMethod",
                 verificationMethod: sig.address,
-                jws: sig.signature,
+                jws: jwsGen({content: message, signature: sig.signature})//sig.signature,
               },
             };
             const signedMessageJSON = JSON.stringify(signedMessage, null, 2);
@@ -129,7 +142,7 @@ export default function SignMessage() {
                 value={`
                 "proof": {
                     "type": "EcdsaSecp256k1RecoverySignature2020",
-                    "created": "${new Date().toISOString()}",
+                    "created": "${Math.floor(new Date().getTime() / 1000)}",
                     "proofPurpose": "assertionMethod",
                     "verificationMethod": "${signatures[signatures.length - 1].address}",
                     "jws": "${signatures[signatures.length - 1].signature}"
@@ -145,7 +158,7 @@ export default function SignMessage() {
                       proofPurpose: "assertionMethod",
                       verificationMethod:
                         signatures[signatures.length - 1].address,
-                      jws: signatures[signatures.length - 1].signature,
+                      proof: signatures[signatures.length - 1].signature,
                     },
                   })
                 )}`}
