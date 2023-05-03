@@ -25,7 +25,8 @@ const signMessage = async ({ message }) => {
     }
 };
 
-// async function that generates a valid jws token for the proof
+// function that generates a valid jws token for the proof
+// btoa and atob are depractated. Ill change them later
 const jwsGen = ({ content, signature }) => {
   const header = JSON.stringify(jwsheader);
   const jws = [btoa(header), btoa(content), btoa(signature)].join('.');
@@ -57,19 +58,17 @@ export default function SignMessage() {
           // console.log("test", bsig)
           // save contents of the file as a string with no spaces
           const message = JSON.stringify(JSON.parse(e.target.result), 0);
-          console.log(typeof(message))
           const sig = await signMessage({ message });
-          console.log("the sig", sig)
           if (sig) {
             const signedMessage = {
               // the ... is basically an easy way to copy all the properties of message into a new object
               ...JSON.parse(message),
               proof: {
                 type: "EcdsaSecp256k1RecoverySignature2020",
-                created: Math.floor(new Date().getTime() / 1000),
+                created: Math.floor(new Date().getTime() / 1000), //UTC timestamp
                 proofPurpose: "assertionMethod",
                 verificationMethod: sig.address,
-                jws: jwsGen({content: message, signature: sig.signature})//sig.signature,
+                jws: jwsGen({content: message, signature: sig.signature}),
               },
             };
             const signedMessageJSON = JSON.stringify(signedMessage, null, 2);
@@ -119,11 +118,9 @@ export default function SignMessage() {
           {signatures.length > 0 &&
           <div className="p-2" key={signatures[signatures.length - 1].signature}>
             <div className="my-3">
-              <p>
-                {/* Message: {signatures[signatures.length - 1].message}  */}
-              </p>
-              <p>Signer: {signatures[signatures.length - 1].address}</p>
-              <p>Signature: </p>
+              <p className='text-green-500 text-center'>This credential is signed!</p>
+              <p className='text-green-500 text-center'>Signed by: {signatures[signatures.length - 1].address}</p>
+              {/* <p>Signature: {signatures[signatures.length - 1].signature}</p>
               <textarea
                 type="text"
                 readOnly
@@ -131,8 +128,8 @@ export default function SignMessage() {
                 className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
                 placeholder="Generated signature"
                 value={signatures[signatures.length - 1].signature}
-              />
-              <p>W3C proof format: </p>
+              /> */}
+              {/* <p>W3C proof format: </p>
               <textarea
                 type="text"
                 readOnly
@@ -148,20 +145,9 @@ export default function SignMessage() {
                     "jws": "${signatures[signatures.length - 1].signature}"
                   }`
                 }
-              />
+              /> */}
               <a
-                href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                  JSON.stringify({
-                    proof: {
-                      type: "EcdsaSecp256k1RecoverySignature2020",
-                      created: new Date().toISOString(),
-                      proofPurpose: "assertionMethod",
-                      verificationMethod:
-                        signatures[signatures.length - 1].address,
-                      proof: signatures[signatures.length - 1].signature,
-                    },
-                  })
-                )}`}
+                href={`data:text/json;charset=utf-8,${encodeURIComponent(new Date().toISOString())}`} //this is the link to the download. it used to hold the proof 
               download="signed_message.json"
             >
               <button className="btn btn-primary submit-button focus:ring focus:outline-none w-full mt-3">
