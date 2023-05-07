@@ -12,9 +12,9 @@ function LandingPage({ onOptionSelect }) {
   return (
     <div className="container mx-auto h-screen flex justify-center items-center">
       <div className="flex flex-col items-center">
-        <button onClick={() => onOptionSelect('issue')} className="py-4 px-8 bg-green-500 text-white rounded-lg mb-2">Issue</button>
-        <button onClick={() => onOptionSelect('generateProof')} className="py-4 px-8 bg-green-500 text-white rounded-lg mb-2">Generate Proof</button>
-        <button onClick={() => onOptionSelect('verify')} className="py-4 px-8 bg-green-500 text-white rounded-lg mb-2">Verify</button>
+        <button onClick={() => onOptionSelect('issue')} className="py-4 px-8 bg-blue-500 text-white rounded-lg mb-2">Issue</button>
+        <button onClick={() => onOptionSelect('generateProof')} className="py-4 px-8 bg-blue-500 text-white rounded-lg mb-2">Generate Proof</button>
+        <button onClick={() => onOptionSelect('verify')} className="py-4 px-8 bg-blue-500 text-white rounded-lg mb-2">Verify</button>
       </div>
     </div>
   );
@@ -39,8 +39,8 @@ function App() {
       default:
         return (
           <div>
-            <h1 className="text-3xl font-bold text-green-500 text-center mb-6">
-              ZKVC - Own Your Identity
+            <h1 className="text-3xl font-bold text-blue-500 text-center mb-6">
+              Veritus Labs
             </h1>
           <LandingPage onOptionSelect={handleOptionSelect} />
           </div>
