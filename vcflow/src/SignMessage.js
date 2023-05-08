@@ -33,6 +33,7 @@ const jwsGen = ({ content, signature }) => {
   return jws;
 }
 
+
 export default function SignMessage() {
     // state that stores the signature information 
     const [signatures, setSignatures] = useState([]);
@@ -40,6 +41,27 @@ export default function SignMessage() {
     const [registry, setRegistry] = useState('');
     //state for document type
     const [vctype, setVctype] = useState('');
+
+    //async function that generates a JSON-LD 
+    const generateJSON = async (e) => {
+      e.preventDefault();
+      const formInputs = document.querySelectorAll('form input[type="text"]');
+      const formData = {}; //add the default JSOn stuf here
+      formInputs.forEach(input => {
+        formData[input.name] = input.value;
+      });
+      const jsonData = JSON.stringify(formData, null, 2);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'form-data.json';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
 
     // async function that handles submission and signing
     const handleSign = async (e) => {
@@ -129,23 +151,79 @@ export default function SignMessage() {
                 <button className="flex-1 py-4 px-8 bg-blue-500 text-white rounded-lg mb-2 mr-4" id="vax" onClick={() => setVctype('vax')}>Vaccination Card</button>
                 <button className="flex-1 py-4 px-8 bg-blue-500 text-white rounded-lg mb-2 mr-4" id="kyc" onClick={() => setVctype('kyc')}>KYC Token</button>
         </div>
-        {vctype && (
-          <form>
+        {vctype === 'dl' && (
+          <form onSubmit={generateJSON}>
+            <label htmlFor="dl-name" className="block text-lg font-medium text-gray-500 mt-4">
+              Name
+            </label>
+            <input type="text" id="dl-name" name="dl-name" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <label htmlFor="dl-license-no" className="block text-lg font-medium text-gray-500 mt-4">
+              License Number
+            </label>
+            <input type="text" id="dl-license-no" name="dl-license-no" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <label htmlFor="dl-issue-date" className="block text-lg font-medium text-gray-500 mt-4">
+              Issue Date
+            </label>
+            <input type="text" id="dl-issue-date" name="dl-issue-date" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <button className="py-4 px-8 bg-blue-500 text-white rounded-lg mt-4" type="submit">
+              Submit
+            </button>
+          </form>
+        )}
+        {vctype === 'vax' && (
+          <form onSubmit={generateJSON}>
             <label htmlFor="name" className="block text-lg font-medium text-gray-500 mt-4">
               Name
             </label>
             <input type="text" id="name" name="name" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
-            <label htmlFor="bday" className="block text-lg font-medium text-gray-500 mt-4">
-              Birthday
-            </label> 
-            <input type="text" id="bday" name="bday" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <label htmlFor="dob" className="block text-lg font-medium text-gray-500 mt-4">
+              Date of Birth
+            </label>
+            <input type="date" id="dob" name="dob" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <label htmlFor="vaxtype" className="block text-lg font-medium text-gray-500 mt-4">
+              Vaccine Type
+            </label>
+            <select id="vaxtype" name="vaxtype" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline">
+              <option value="">Select a vaccine type</option>
+              <option value="pfizer">Pfizer</option>
+              <option value="moderna">Moderna</option>
+              <option value="jj">Johnson & Johnson</option>
+              <option value="astrazeneca">AstraZeneca</option>
+            </select>
+            <label htmlFor="vaxdate" className="block text-lg font-medium text-gray-500 mt-4">
+              Date of Vaccination
+            </label>
+            <input type="date" id="vaxdate" name="vaxdate" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <button className="py-4 px-8 bg-blue-500 text-white rounded-lg mt-4" type="submit">
+              Submit
+            </button>
+          </form>
+        )}
+        {vctype === 'kyc' && (
+          <form onSubmit={generateJSON}>
+            <label htmlFor="name" className="block text-lg font-medium text-gray-500 mt-4">
+              Full Name
+            </label>
+            <input type="text" id="name" name="name" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+
+            <label htmlFor="dob" className="block text-lg font-medium text-gray-500 mt-4">
+              Date of Birth
+            </label>
+            <input type="date" id="dob" name="dob" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+
             <label htmlFor="address" className="block text-lg font-medium text-gray-500 mt-4">
               Address
             </label>
             <input type="text" id="address" name="address" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+
+            <label htmlFor="kyc-number" className="block text-lg font-medium text-gray-500 mt-4">
+              KYC Token Number
+            </label>
+            <input type="text" id="kyc-number" name="kyc-number" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+
             <button className="py-4 px-8 bg-blue-500 text-white rounded-lg mt-4" type="submit">
               Submit
-              </button>
+            </button>
           </form>
         )}
           
