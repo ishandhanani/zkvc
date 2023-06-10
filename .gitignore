@@ -106,3 +106,4 @@ dist
 # additional things not to push
 .DS_Store
 /.DS_Store
+*.eslintrc.json

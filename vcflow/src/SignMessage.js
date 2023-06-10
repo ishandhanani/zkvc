@@ -45,7 +45,8 @@ export default function SignMessage() {
     //async function that generates a JSON-LD 
     const generateJSON = async (e) => {
       e.preventDefault();
-      const formInputs = document.querySelectorAll('form input[type="text"]');
+      let formInputs = document.querySelectorAll('form input[type="text"]');
+      formInputs = Array.from(formInputs).concat(Array.from(document.querySelectorAll('form input[type="date"]')))
       const formData = {}; //add the default JSOn stuf here
       formInputs.forEach(input => {
         formData[input.name] = input.value;
@@ -81,6 +82,7 @@ export default function SignMessage() {
           // console.log("test", bsig)
           // save contents of the file as a string with no spaces
           const message = JSON.stringify(JSON.parse(e.target.result), 0);
+          console.log(message)
           const sig = await signMessage({ message });
           if (sig) {
             const signedMessage = {
@@ -153,18 +155,14 @@ export default function SignMessage() {
         </div>
         {vctype === 'dl' && (
           <form onSubmit={generateJSON}>
-            <label htmlFor="dl-name" className="block text-lg font-medium text-gray-500 mt-4">
-              Name
+            <label htmlFor="id" className="block text-lg font-medium text-gray-500 mt-4">
+              Id
             </label>
-            <input type="text" id="dl-name" name="dl-name" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
-            <label htmlFor="dl-license-no" className="block text-lg font-medium text-gray-500 mt-4">
-              License Number
+            <input type="text" id="id" name="id" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <label htmlFor="birth_date" className="block text-lg font-medium text-gray-500 mt-4">
+              Date of Birth
             </label>
-            <input type="text" id="dl-license-no" name="dl-license-no" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
-            <label htmlFor="dl-issue-date" className="block text-lg font-medium text-gray-500 mt-4">
-              Issue Date
-            </label>
-            <input type="text" id="dl-issue-date" name="dl-issue-date" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
+            <input type="date" id="birth_date" name="birth_date" className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline" />
             <button className="py-4 px-8 bg-blue-500 text-white rounded-lg mt-4" type="submit">
               Submit
             </button>
